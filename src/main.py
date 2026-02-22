@@ -5,7 +5,7 @@ main.py - GNOME hotkey toggle for voice-to-text.
 Usage:
     Bind this script to a GNOME keyboard shortcut.
     Press the shortcut once to START recording.
-    Press it again to STOP recording, transcribe, beautify, and paste at cursor.
+    Press it again to STOP recording, transcribe, beautify, and copy to clipboard.
 
 Toggle mechanism:
     - Uses a lock file (/tmp/audio-to-text.pid) to track state.
@@ -20,6 +20,7 @@ import signal
 import subprocess
 import threading
 import tempfile
+import time
 
 # Resolve paths relative to this script's directory
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -37,8 +38,8 @@ def notify(message: str, urgency: str = "normal") -> None:
         stderr=subprocess.DEVNULL,
     )
 
-def paste_text(text: str) -> None:
-    """Copy text to clipboard and simulate Ctrl+V to paste at cursor."""
+def copy_text(text: str) -> None:
+    """Copy text to clipboard"""
     # Copy to Wayland clipboard
     proc = subprocess.Popen(
         ["wl-copy"],
@@ -47,16 +48,6 @@ def paste_text(text: str) -> None:
         stderr=subprocess.DEVNULL,
     )
     proc.communicate(input=text.encode("utf-8"))
-
-    # Small delay to ensure clipboard is ready, then simulate Ctrl+V
-    import time
-    time.sleep(0.1)
-
-    subprocess.Popen(
-        ["wtype", "-M", "ctrl", "-k", "v"],
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
-    )
 
 
 def create_lock(pid: int) -> None:
@@ -117,7 +108,7 @@ def run_pipeline() -> None:
     beautified = beautify_file(OUTPUT_PATH)
 
     # Paste at cursor
-    paste_text(beautified)
+    copy_text(beautified)
     notify("Done!")
 
 
