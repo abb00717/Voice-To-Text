@@ -1,4 +1,4 @@
-# Audio-To-Text
+# Voice-To-Text
 
 [繁體中文](docs/traditional-chinese.md) | [English](docs/english.md)
 
