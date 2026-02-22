@@ -9,9 +9,9 @@ Usage:
 
 Toggle mechanism:
     - Uses a lock file (/tmp/audio-to-text.pid) to track state.
-    - First invocation:  no lock file  → start recording, write PID.
-    - Second invocation: lock file exists → send SIGUSR1, exit.
-    - Recording process catches SIGUSR1, runs the full pipeline, then cleans up.
+    - First invocation:  start recording, write PID.
+    - Second invocation: send SIGUSR1, exit.
+    - Runs the full pipeline, then cleans up.
 """
 
 import os
@@ -24,8 +24,8 @@ import tempfile
 # Resolve paths relative to this script's directory
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 LOCK_FILE = os.path.join(tempfile.gettempdir(), "audio-to-text.pid")
-RECORDING_PATH = os.path.join(SCRIPT_DIR, "recording.wav")
-OUTPUT_PATH = os.path.join(SCRIPT_DIR, "output.txt")
+RECORDING_PATH = os.path.join(SCRIPT_DIR, "output/recording.wav")
+OUTPUT_PATH = os.path.join(SCRIPT_DIR, "output/output.txt")
 
 
 def notify(message: str, urgency: str = "normal") -> None:
@@ -35,7 +35,6 @@ def notify(message: str, urgency: str = "normal") -> None:
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL,
     )
-
 
 def paste_text(text: str) -> None:
     """Copy text to clipboard and simulate Ctrl+V to paste at cursor."""
@@ -92,7 +91,7 @@ def is_process_alive(pid: int) -> bool:
 
 
 def run_pipeline() -> None:
-    """Run transcribe -> beautify -> paste pipeline."""
+    """transcribe -> beautify -> paste pipeline."""
     from transcribe import transcribe
     from beautify import beautify_file
 
@@ -113,7 +112,7 @@ def run_pipeline() -> None:
     with open(OUTPUT_PATH, "w", encoding="utf-8") as f:
         f.write(text)
 
-    # Beautify (half-width → full-width punctuation)
+    # Beautify
     beautified = beautify_file(OUTPUT_PATH)
 
     # Paste at cursor
@@ -164,10 +163,11 @@ def main() -> None:
     pid = read_lock()
 
     if pid is not None and is_process_alive(pid):
-        # Lock file exists and process is alive -> stop mode
+        # If lock file exists, it means the program is running in start mode.
+        # So we should stop it.
         stop_recording()
     else:
-        # No lock file or stale -> start mode
+        # No lock file or stale, so start recording
         if pid is not None:
             remove_lock()  # Clean up stale lock
         start_recording()

@@ -1,4 +1,4 @@
 .request-header.txt
-output.txt
+output/
 __pycache__
 .venv
