@@ -1,9 +1,5 @@
 # Audio-To-Text
 
-[繁體中文](docs/traditional-chinese.md) | [English](docs/english.md)
-
----
-
 這是一個基於 ChatGPT Web API 的高效語音轉文字工具，專為 Linux (GNOME) 環境設計。旨在讓使用者透過簡單的快捷鍵切換，即可實現「錄音 -> 轉錄 -> 美化 -> 複製到剪貼簿」的一鍵化流程。
 
 ## 前置作業
