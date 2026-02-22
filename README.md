@@ -15,7 +15,7 @@ This project uses [uv](https://github.com/astral-sh/uv) for Python environment a
 Ensure your system has `portaudio` (for recording) and `wl-clipboard` (for clipboard operations on Wayland) installed:
 
 ```bash
- For Debian/Ubuntu
+# For Debian/Ubuntu
 sudo apt install libportaudio2 libportaudiocpp0 portaudio19-dev wl-clipboard
 ```
 

@@ -11,7 +11,7 @@
 確保系統已安裝 `portaudio` (用於錄音) 以及 `wl-clipboard` (用於 Wayland 下的剪貼簿操作)：
 
 ```bash
- 以 Debian/Ubuntu 為例
+# 以 Debian/Ubuntu 為例
 sudo apt install libportaudio2 libportaudiocpp0 portaudio19-dev wl-clipboard
 ```
 
