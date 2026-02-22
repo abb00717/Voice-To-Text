@@ -2,9 +2,6 @@
 """
 ChatGPT Transcribe API client.
 
-Usage:
-    python3 transcribe.py <audio_file>
-
 Reads headers (including Authorization Bearer token and cookies)
 from request-header.txt in the same directory.
 """
@@ -15,7 +12,7 @@ import json
 import requests
 
 API_URL = "https://chatgpt.com/backend-api/transcribe"
-HEADERS_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".request-header.txt")
+HEADERS_FILE = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), ".request-header.txt")
 
 def load_headers(headers_file: str) -> tuple[dict[str, str], dict[str, str]]:
     """Load headers from request-header.txt.

@@ -23,9 +23,10 @@ import tempfile
 
 # Resolve paths relative to this script's directory
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.dirname(SCRIPT_DIR)
 LOCK_FILE = os.path.join(tempfile.gettempdir(), "audio-to-text.pid")
-RECORDING_PATH = os.path.join(SCRIPT_DIR, "output/recording.wav")
-OUTPUT_PATH = os.path.join(SCRIPT_DIR, "output/output.txt")
+RECORDING_PATH = os.path.join(PROJECT_ROOT, "output/recording.wav")
+OUTPUT_PATH = os.path.join(PROJECT_ROOT, "output/output.txt")
 
 
 def notify(message: str, urgency: str = "normal") -> None:
