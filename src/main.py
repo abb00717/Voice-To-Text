@@ -88,7 +88,6 @@ def run_pipeline() -> None:
     from beautify import beautify_file
 
     # Transcribe
-    notify("Transcribing...")
     result = transcribe(RECORDING_PATH)
 
     if "error" in result:
