@@ -1,4 +1,4 @@
-# Audio-To-Text
+# Voice-To-Text
 
 A highly efficient voice-to-text tool based on the ChatGPT Web API, specifically designed for Linux (GNOME) environments. It enables a seamless "Record -> Transcribe -> Beautify -> Copy to Clipboard" workflow with a simple hotkey toggle.
 
