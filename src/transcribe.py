@@ -34,13 +34,16 @@ def load_headers(headers_file: str) -> tuple[dict[str, str], dict[str, str]]:
         name = lines[i].strip()
         value = lines[i + 1].strip()
 
-        if name == "cookie":
+        name_lower = name.lower()
+        if name_lower == "cookie":
             # Parse cookie string into dict
             for pair in value.split(";"):
                 pair = pair.strip()
                 if "=" in pair:
                     k, v = pair.split("=", 1)
                     cookies[k.strip()] = v.strip()
+        elif name_lower in ("content-length", "content-type"):
+            continue
         else:
             headers[name] = value
 
