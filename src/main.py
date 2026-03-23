@@ -15,12 +15,12 @@ Toggle mechanism:
 """
 
 import os
-import sys
 import signal
 import subprocess
-import threading
+import sys
 import tempfile
-import time
+import threading
+from datetime import datetime
 
 # Resolve paths relative to this script's directory
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -37,6 +37,7 @@ def notify(message: str, urgency: str = "normal") -> None:
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL,
     )
+
 
 def copy_text(text: str) -> None:
     """Copy text to clipboard"""
@@ -84,8 +85,8 @@ def is_process_alive(pid: int) -> bool:
 
 def run_pipeline() -> None:
     """transcribe -> beautify -> paste pipeline."""
-    from transcribe import transcribe
     from beautify import beautify_file
+    from transcribe import transcribe
 
     # Transcribe
     result = transcribe(RECORDING_PATH)
@@ -152,6 +153,10 @@ def stop_recording() -> None:
 
 def main() -> None:
     pid = read_lock()
+    global OUTPUT_PATH
+    OUTPUT_PATH = os.path.join(
+        PROJECT_ROOT, f"output/{datetime.isoformat(datetime.today())}.txt"
+    )
 
     if pid is not None and is_process_alive(pid):
         # If lock file exists, it means the program is running in start mode.
