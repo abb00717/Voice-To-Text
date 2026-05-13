@@ -69,17 +69,6 @@ def get_content_type(filepath: str) -> str:
     return mime_map.get(ext, "audio/mpeg")
 
 
-def get_model():
-    """Lazy initialization of the Whisper model."""
-    global _model
-    if _model is None:
-        try:
-            _model = WhisperModel(MODEL_SIZE, device=DEVICE, compute_type=COMPUTE_TYPE)
-        except Exception:
-            _model = WhisperModel(MODEL_SIZE, device="cpu", compute_type="int8")
-    return _model
-
-
 def transcribe_api(audio_path: str, max_retries: int = 5) -> dict:
     """Try transcribing via ChatGPT API with retries."""
     if not os.path.exists(HEADERS_FILE):
@@ -115,18 +104,6 @@ def transcribe_api(audio_path: str, max_retries: int = 5) -> dict:
     return {"error": "API failed after all retries"}
 
 
-def transcribe_local(audio_path: str) -> dict:
-    """Transcribe using local faster-whisper."""
-    print("Falling back to local transcription...")
-    try:
-        model = get_model()
-        segments, _ = model.transcribe(audio_path, beam_size=5)
-        full_text = "".join(segment.text for segment in segments).strip()
-        return {"text": full_text}
-    except Exception as e:
-        return {"error": str(e)}
-
-
 def transcribe(audio_path: str) -> dict:
     """
     Main transcription entry point.
@@ -135,15 +112,8 @@ def transcribe(audio_path: str) -> dict:
     if not os.path.exists(audio_path):
         return {"error": f"Audio file not found: {audio_path}"}
 
-    # Try API first
-    result = transcribe_api(audio_path)
-
-    # If API failed, try local
-    if "error" in result:
-        print(f"API transcription failed: {result['error']}")
-        result = transcribe_local(audio_path)
-
-    return result
+    # Call API
+    return transcribe_api(audio_path)
 
 
 if __name__ == "__main__":

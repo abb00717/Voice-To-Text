@@ -115,10 +115,6 @@ def run_pipeline() -> None:
 def start_recording() -> None:
     """Start mode: record audio and wait for SIGUSR1 to stop."""
     from record import record
-    from transcribe import get_model
-
-    # Pre-load the model in the background while user is recording
-    threading.Thread(target=get_model, daemon=True).start()
 
     stop_event = threading.Event()
 
