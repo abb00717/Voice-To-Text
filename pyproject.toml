@@ -5,7 +5,6 @@ description = "GNOME hotkey-triggered voice-to-text pipeline"
 requires-python = ">=3.12"
 dependencies = [
     "brotli>=1.2.0",
-    "faster-whisper>=1.2.1",
     "pyaudio",
     "requests>=2.33.1",
 ]

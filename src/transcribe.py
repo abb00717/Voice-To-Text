@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Transcription module supporting both ChatGPT API and local faster-whisper fallback.
+Transcription via the ChatGPT backend API.
 """
 
 import os
@@ -8,20 +8,11 @@ import sys
 import time
 
 import requests
-from faster_whisper import WhisperModel
 
 API_URL = "https://chatgpt.com/backend-api/transcribe"
 HEADERS_FILE = os.path.join(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))), ".request-header.txt"
 )
-
-# Local model configuration
-MODEL_SIZE = "medium"
-DEVICE = "cuda"
-COMPUTE_TYPE = "float16"
-
-# Initialize model at module level so it can be pre-loaded
-_model = None
 
 
 def load_headers(headers_file: str) -> tuple[dict[str, str], dict[str, str]]:
@@ -105,14 +96,10 @@ def transcribe_api(audio_path: str, max_retries: int = 5) -> dict:
 
 
 def transcribe(audio_path: str) -> dict:
-    """
-    Main transcription entry point.
-    Tries API first with retries, then falls back to local.
-    """
+    """Main transcription entry point."""
     if not os.path.exists(audio_path):
         return {"error": f"Audio file not found: {audio_path}"}
 
-    # Call API
     return transcribe_api(audio_path)
 
 
