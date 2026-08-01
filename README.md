@@ -50,11 +50,3 @@ uv run src/main.py
 ### Recommended: Bind to GNOME Hotkey
 
 It is recommended to bind `uv run /path/to/Audio-To-Text/src/main.py` to a system shortcut (e.g., `Ctrl + Alt + T`) for the smootmost experience.
-
-## Project Structure
-
-- `src/main.py`: Main script for toggling recording states and orchestration.
-- `src/transcribe.py`: Handles communication with the ChatGPT API.
-- `src/beautify.py`: Logic for text beautification and punctuation correction.
-- `src/record.py`: Underlying recording implementation.
-- `output/`: Directory for temporary audio files and final transcription results.
